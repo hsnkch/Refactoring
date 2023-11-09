@@ -14,6 +14,8 @@ env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: refactoring-project-deploy
   PROJECT_NAME: refactoring-project
+  CODE_DEPLOY_APPLICATION_NAME: refactoring_project_deploy
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: refactoring_project_deploy_group
 
 jobs:
   build:
@@ -66,6 +68,15 @@ jobs:
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://${{ env.S3_BUCKET_NAME }}/${{ env.PROJECT_NAME }}/$GITHUB_SHA.zip
 
-
+      # Deploy
+      - name: Deploy
+        run: |
+          aws deploy create-deployment \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=${{ env.S3_BUCKET_NAME }},bundleType=zip,key=${{ env.PROJECT_NAME }}/$GITHUB_SHA.zip \
+          --region ${{ env.AWS_REGION }} \
 
       

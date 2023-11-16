@@ -1,6 +1,7 @@
 package com.bbang.refactoring.member.controller;
 
 import com.bbang.refactoring.member.dto.MemberJoinDTO;
+import com.bbang.refactoring.member.dto.MemberUpdateDTO;
 import com.bbang.refactoring.member.model.Member;
 import com.bbang.refactoring.member.repository.MemberRepository;
 import com.bbang.refactoring.member.service.MemberServiceImpl;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/member")
 @Controller
@@ -26,7 +29,7 @@ public class MemberController {
         return "/member/signup";
     }
 
-    @PostMapping("/member/signup")
+    @PostMapping("/signup")
     public ResponseEntity<?> join(@ModelAttribute MemberJoinDTO memberJoinDTO) {
         String memberId = memberJoinDTO.getMemberId();
         String memberName = memberJoinDTO.getMemberName();
@@ -42,5 +45,19 @@ public class MemberController {
         }
         return ResponseEntity.ok().body("ok");
     }
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@ModelAttribute MemberUpdateDTO memberUpdateDTO, @RequestParam String memberId) {
+        memberService.updateMember(memberId, memberUpdateDTO);
+        return ResponseEntity.ok().body("ok");
+    }
+
+    @GetMapping("/list")
+    public String memberList(Model model) {
+        List<Member> allMembers = memberService.getAllMembers();
+        model.addAttribute("members", allMembers);
+        return "/member/list";
+    }
+
+
 
 }

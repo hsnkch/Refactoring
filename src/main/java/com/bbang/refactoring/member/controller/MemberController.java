@@ -41,13 +41,13 @@ public class MemberController {
                     .memberPw(memberPw)
                     .memberName(memberName)
                     .build();
-            memberService.signup(newMember);
+            memberService.register(newMember);
         }
         return ResponseEntity.ok().body("ok");
     }
     @PostMapping("/update")
     public ResponseEntity<?> update(@ModelAttribute MemberUpdateDTO memberUpdateDTO, @RequestParam String memberId) {
-        memberService.updateMember(memberId, memberUpdateDTO);
+        memberService.modifyMember(memberId, memberUpdateDTO);
         return ResponseEntity.ok().body("ok");
     }
 

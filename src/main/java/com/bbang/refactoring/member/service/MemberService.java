@@ -6,13 +6,13 @@ import com.bbang.refactoring.member.model.Member;
 import java.util.List;
 
 public interface MemberService {
-    void signup(Member member);
+    void register(Member member);
 
     List<Member> getAllMembers();
 
     Member getMemberByMemberId(String memberId);
 
-    void deleteMemberByMemberId(String memberId);
+    void removeMember(String memberId);
 
-    void updateMember(String memberId, MemberUpdateDTO memberUpdateDTO);
+    void modifyMember(String memberId, MemberUpdateDTO memberUpdateDTO);
 }
